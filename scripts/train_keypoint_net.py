@@ -94,6 +94,9 @@ def main(file):
     compression = hvd.Compression.none  # or hvd.Compression.fp16
     optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters(), compression=compression)
 
+    # Synchronize model weights from all ranks
+    hvd.broadcast_parameters(model.state_dict(), root_rank=0)
+
     # checkpoint model
     log_path = os.path.join(config.model.checkpoint_path, 'logs')
     os.makedirs(log_path, exist_ok=True)
@@ -139,7 +142,8 @@ def evaluation(config, completed_epoch, model, summary):
     use_color = config.model.params.use_color
 
     if rank() == 0:
-        eval_params = [{'res': (320, 240), 'top_k': 300}]
+        eval_shape = config.datasets.augmentation.image_shape[::-1]
+        eval_params = [{'res': eval_shape, 'top_k': 300}]
         for params in eval_params:
             hp_dataset = PatchesDataset(root_dir=config.datasets.val.path, use_color=use_color, output_shape=params['res'], type='a')
 
@@ -172,8 +176,6 @@ def evaluation(config, completed_epoch, model, summary):
             print('Correctness d3 {:.3f}'.format(c3))
             print('Correctness d5 {:.3f}'.format(c5))
             print('MScore {:.3f}'.format(mscore))
-        if summary:
-            summary.commit_log()
 
     # Save checkpoint
     if config.model.save_checkpoint and rank() == 0:
@@ -249,7 +251,6 @@ def train(config, train_loader, model, optimizer, epoch, summary):
                     model(data_cuda, debug=True)
                     for k, v in model_submodule(model).vis.items():
                         summary.add_image(k, v)
-                    summary.commit_log()
 
 
 if __name__ == '__main__':
