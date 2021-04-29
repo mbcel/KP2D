@@ -1,6 +1,6 @@
 # Copyright 2020 Toyota Research Institute.  All rights reserved.
 
-from functools import lru_cache
+from functools32 import lru_cache
 
 import torch
 import torch.nn.functional as F

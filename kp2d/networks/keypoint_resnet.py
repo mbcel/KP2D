@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 import torchvision.models as models
-from kp2d.utils.image import image_grid
+from kp2d.kp2d.utils.image import image_grid
 
 
 def upsample(x):
@@ -149,7 +149,7 @@ class KeypointDecoder(nn.Module):
 
 class KeypointResnet(nn.Module):
     def __init__(self, with_drop=True):
-        super().__init__()
+        super(KeypointResnet, self).__init__()
         print('Instantiating keypoint resnet')
 
         pretrained = True

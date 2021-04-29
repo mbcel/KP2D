@@ -6,8 +6,9 @@ from math import pi
 import torch
 import torch.nn.functional as F
 from PIL import Image
+import future
 
-from kp2d.utils.image import image_grid
+from kp2d.kp2d.utils.image import image_grid
 
 
 class KeypointNet(torch.nn.Module):
@@ -29,7 +30,7 @@ class KeypointNet(torch.nn.Module):
     """
 
     def __init__(self, use_color=True, do_upsample=True, with_drop=True, do_cross=True, **kwargs):
-        super().__init__()
+        super(KeypointNet, self).__init__()
 
         self.training = True
 

@@ -1,14 +1,15 @@
 # Copyright 2020 Toyota Research Institute.  All rights reserved.
 
+
 import numpy as np
 import torch
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
-from kp2d.evaluation.descriptor_evaluation import (compute_homography,
+from kp2d.kp2d.evaluation.descriptor_evaluation import (compute_homography,
                                                    compute_matching_score)
-from kp2d.evaluation.detector_evaluation import compute_repeatability
-from kp2d.utils.image import to_color_normalized, to_gray_normalized
+from kp2d.kp2d.evaluation.detector_evaluation import compute_repeatability
+from kp2d.kp2d.utils.image import to_color_normalized, to_gray_normalized
 
 
 def evaluate_keypoint_net(data_loader, keypoint_net, output_shape=(320, 240), top_k=300, use_color=True):

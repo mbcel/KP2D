@@ -8,7 +8,7 @@ from os import path as osp
 import cv2
 import numpy as np
 
-from kp2d.utils.keypoints import warp_keypoints
+from kp2d.kp2d.utils.keypoints import warp_keypoints
 
 
 def select_k_best(points, descriptors, k):
